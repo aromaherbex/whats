@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envoyer des informations sur WhatsApp</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f2f1;
+            color: #004d40;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: left;
+        }
+
+        h2 {
+            color: #004d40;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            color: #004d40;
+        }
+
+        select, input[type="date"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #004d40;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .checkbox-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #004d40;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 12px;
+            accent-color: #004d40;
+        }
+
+        button {
+            background-color: #004d40;
+            color: #ffffff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #00332d;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Entrer les informations</h2>
+        <form id="infoForm">
+            <label for="finca">FINCA :</label>
+            <select id="finca" name="finca" required>
+                <option value="">Sélectionner une option</option>
+                <option value="F01">F01</option>
+                <option value="F02">F02</option>
+                <option value="F03">F03</option>
+                <option value="F04">F04</option>
+                <option value="F05">F05</option>
+                <option value="F06">F06</option>
+                <option value="F08">F08</option>
+                <option value="F09">F09</option>
+                <option value="F13">F13</option>
+                <option value="F19">F19</option>
+                <option value="F20">F20</option>
+                <option value="F21">F21</option>
+                <option value="F22">F22</option>
+            </select>
+
+            <label for="date">DATE :</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="destinataire">Destinataire :</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" id="person1" name="destinataire" value="person1"> Pointage</label>
+                <label><input type="checkbox" id="person2" name="destinataire" value="person2"> Rendement</label>
+            </div>
+
+            <label for="message">Message :</label>
+            <textarea id="message" name="message" rows="4" required></textarea>
+
+            <button type="button" onclick="sendToWhatsApp()">Envoyer sur WhatsApp</button>
+        </form>
+    </div>
+
+    <script>
+        function sendToWhatsApp() {
+            var finca = document.getElementById("finca").value;
+            var date = document.getElementById("date").value;
+            var message = document.getElementById("message").value;
+
+            var phoneNumbers = [];
+            if (document.getElementById("person1").checked) {
+                phoneNumbers.push("+212662781207"); // Numéro de téléphone pour la personne 1
+            }
+            if (document.getElementById("person2").checked) {
+                phoneNumbers.push("+2126958352"); // Numéro de téléphone pour la personne 2
+            }
+
+            var fullMessage = `Concernant la Ferme: ${finca}%0ALe: ${date}ALe problème a été résolu (${message})`;
+
+            if (phoneNumbers.length > 0) {
+                for (var i = 0; i < phoneNumbers.length; i++) {
+                    (function(i) {
+                        setTimeout(function() {
+                            var whatsappURL = `https://wa.me/${phoneNumbers[i]}?text=${fullMessage}`;
+                            window.open(whatsappURL, '_blank');
+                        }, i * 1000); // Délai de 1 seconde entre chaque envoi
+                    })(i);
+                }
+
+                // Clear form fields after sending
+                document.getElementById("infoForm").reset();
+                var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(function(checkbox) {
+                    checkbox.checked = false;
+                });
+            }
+        }
+    </script>
+</body>
+</html>
