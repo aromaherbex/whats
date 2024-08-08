@@ -127,10 +127,14 @@
             <textarea id="message" name="message" rows="4" required></textarea>
 
             <button type="button" onclick="sendToWhatsApp()">Envoyer sur WhatsApp</button>
+            <button type="button" onclick="navigateToPag()">back to Repport</button>
         </form>
     </div>
 
     <script>
+        function navigateToPag() {
+      window.location.href = 'https://aromaherbex.github.io/LUNDI/'; 
+    }
         function sendToWhatsApp() {
             var finca = document.getElementById("finca").value;
             var date = document.getElementById("date").value;
